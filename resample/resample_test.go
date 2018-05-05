@@ -100,6 +100,24 @@ func TestSampleDown(t *testing.T) {
 
 }
 
+func BenchmarkSampleUp(b *testing.B) {
+	b.StopTimer()
+
+	vec := make([]float64, 8192*16)
+
+	b.StartTimer()
+	SampleUp(vec, 100)
+}
+
+func BenchmarkSampleDown(b *testing.B) {
+	b.StopTimer()
+
+	vec := make([]float64, 8192*16)
+
+	b.StartTimer()
+	SampleDown(vec, 100)
+}
+
 func testEq(a, b []float64) bool {
 
 	if a == nil && b == nil {
