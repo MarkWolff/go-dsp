@@ -159,3 +159,33 @@ func (w *Wav) ReadFloats(n int) ([]float32, error) {
 	}
 	return f, nil
 }
+
+// ReadDoubles is like ReadSamples, but it converts any underlying data to a
+// float64.
+func (w *Wav) ReadFloat64(n int) ([]float64, error) {
+	d, err := w.ReadSamples(n)
+	if err != nil {
+		return nil, err
+	}
+	var f []float64
+	switch d := d.(type) {
+	case []uint8:
+		f = make([]float64, len(d))
+		for i, v := range d {
+			f[i] = float64(v) / math.MaxUint8
+		}
+	case []int16:
+		f = make([]float64, len(d))
+		for i, v := range d {
+			f[i] = (float64(v) - math.MinInt16) / (math.MaxInt16 - math.MinInt16)
+		}
+	case []float32:
+		f = make([]float64, len(d))
+		for i, v := range d {
+			f[i] = float64(v)
+		}
+	default:
+		return nil, fmt.Errorf("wav: unknown type: %T", d)
+	}
+	return f, nil
+}
