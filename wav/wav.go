@@ -160,7 +160,7 @@ func (w *Wav) ReadFloats(n int) ([]float32, error) {
 	return f, nil
 }
 
-// ReadDoubles is like ReadSamples, but it converts any underlying data to a
+// ReadFloat64 is like ReadSamples, but it converts any underlying data to a
 // float64.
 func (w *Wav) ReadFloat64(n int) ([]float64, error) {
 	d, err := w.ReadSamples(n)
