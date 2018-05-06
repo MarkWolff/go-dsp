@@ -100,6 +100,53 @@ func TestSampleDown(t *testing.T) {
 
 }
 
+func makeRange(min, max float64, step float64) []float64 {
+	a := make([]float64, int((max-min)/step)+1)
+	for i := 0; i < (len(a)); i++ {
+		a[i] = min + step*float64(i)
+	}
+	return a
+}
+
+func TestInterpolate(t *testing.T) {
+	testVec := makeRange(0, 20, 4)
+	exp4xVec := makeRange(0, 20, 1)
+	exp2xVec := makeRange(0, 20, 2)
+	exp1xVec := makeRange(0, 20, 4)
+	res1xVec := Interpolate(testVec, 1)
+	res2xVec := Interpolate(testVec, 2)
+	res4xVec := Interpolate(testVec, 4)
+
+	if !testEq(exp1xVec, res1xVec) {
+		t.Fatalf("Failed Interpolate 1x\nOriginal: \t%v\nResult: \t%v\nExpect: \t%v\n",
+			testVec,
+			res1xVec,
+			exp1xVec)
+
+	}
+	if !testEq(exp2xVec, res2xVec) {
+		t.Fatalf("Failed Interpolate 2x\nOriginal: \t%v\nResult: \t%v\nExpect: \t%v\n",
+			testVec,
+			res2xVec,
+			exp2xVec)
+
+	}
+	if !testEq(exp4xVec, res4xVec) {
+		t.Fatalf("Failed Interpolate 4x\nOriginal: \t%v\nResult: \t%v\nExpect: \t%v\n",
+			testVec,
+			res4xVec,
+			exp4xVec)
+
+	}
+	if !testEq([]float64{}, Interpolate([]float64{}, 2)) {
+		t.Fatalf("Failed empty Interpolate case")
+	}
+	if !testEq([]float64{1}, Interpolate([]float64{1}, 3)) {
+		t.Fatalf("Failed single point Interpolate case")
+	}
+
+}
+
 func BenchmarkSampleUp(b *testing.B) {
 	b.StopTimer()
 
